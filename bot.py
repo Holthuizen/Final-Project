@@ -53,6 +53,7 @@ async def on_message(message):
     channel_name = message.guild.name
     sender_name = message.author.name
 
+   #test commands
     if command == 'ping':
             await message.channel.send('Pong')
             return 
@@ -67,6 +68,8 @@ async def on_message(message):
         if data: 
             await message.channel.send(str(data))
             return 
+   # end test commands
+
 
     #setup command: create a table with the table_id of text channel name
     if command == 'setup':
@@ -82,7 +85,7 @@ async def on_message(message):
             return 
 
     #begin command: create deck, deal cards, pick cards
-    if command == 'join':
+    if command == 'begin':
         data = json_request(server_url+f'/join/{channel_name}/{sender_name}')
         if data: 
             await message.channel.send(str(data))

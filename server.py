@@ -85,7 +85,7 @@ def setup(table_id):
     tables[table_id]= Table(table_id)
     for _id in tables:
         print(_id)
-    return table_id 
+    return {"command":"setup", "table":table_id, "player":"", "success":True}
 
 @get("/join/<table_id>/<player_id>")
 def join_table(table_id, player_id):
