@@ -38,7 +38,6 @@ def json_request(url):
     return False
 
 
-
 #EVENTS
 @client.event
 async def on_ready():
@@ -51,41 +50,53 @@ async def on_message(message):
 
     #grap command
     command = commands(message.content)
+    channel_name = message.guild.name
+    sender_name = message.author.name
 
     if command == 'ping':
-        data = json_request(server_url+'https://jsonplaceholder.typicode.com/todos/1')
-        if data: 
             await message.channel.send('Pong')
             return 
 
+    if command == 'msg-info':
+            info = f"{message.author.name} from {message.guild.name}"
+            await message.channel.send(info)
+            return 
 
     if command == 'json':
-        data = json_request(server_url+'https://jsonplaceholder.typicode.com/todos/1')
+        data = json_request('https://jsonplaceholder.typicode.com/todos/1')
         if data: 
             await message.channel.send(str(data))
             return 
 
-    #setup command
+    #setup command: create a table with the table_id of text channel name
     if command == 'setup':
-        data = json_request(server_url+'/setup/desperadoes')
+        data = json_request(server_url+f'/setup/{channel_name}')
         if data: 
             await message.channel.send(str(data))
             return 
-    #join command
+    #join command: join table
     if command == 'join':
-        data = json_request(server_url+'/join/desperadoes/rutte')
+        data = json_request(server_url+f'/join/{channel_name}/{sender_name}')
         if data: 
             await message.channel.send(str(data))
             return 
-    #switch command
+
+    #begin command: create deck, deal cards, pick cards
+    if command == 'join':
+        data = json_request(server_url+f'/join/{channel_name}/{sender_name}')
+        if data: 
+            await message.channel.send(str(data))
+            return         
+    
+    #switch command, swap one card from your hand with a card on the table
     if command == 'switch':
-        data = json_request(server_url+'/switch/desperadoes/rutte/2/2')
+        data = json_request(server_url+f'/switch/{channel_name}/{sender_name}/2/2')
         if data: 
             await message.channel.send(str(data))
             return 
-    #pass command
+    #pass command: pass, initialzing the end of the round (very other player can make last move)
     if command == 'pass':
-        data = json_request(server_url+'/pass/desperadoes/merkel')
+        data = json_request(server_url+f'/pass/{channel_name}/{sender_name}')
         if data: 
             await message.channel.send(str(data))
             return 
