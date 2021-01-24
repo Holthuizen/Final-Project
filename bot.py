@@ -49,7 +49,9 @@ async def on_message(message):
         return
 
     #grap command
-    command = commands(message.content)
+    msg = message.content
+    print(msg)
+    command = commands(msg)
     channel_name = message.guild.name
     sender_name = message.author.name
 
@@ -92,16 +94,27 @@ async def on_message(message):
             return         
     
     #switch command, swap one card from your hand with a card on the table
-    if command == 'switch':
-        data = json_request(server_url+f'/switch/{channel_name}/{sender_name}/2/2')
-        if data: 
-            await message.channel.send(str(data))
+    if command.startswith('switch'):
+        arguments = msg.split()
+        print(arguments)
+        print(len(arguments))
+        if len(arguments) < 2: 
             return 
+        if arguments[1] in ['1','2','3'] and arguments[2] in ['1','2','3']: 
+            data = json_request(server_url+f'/switch/{channel_name}/{sender_name}/{arguments[1]}/{arguments[2]}')
+            if data: 
+                await message.channel.send(str(data))
+                return 
+        return 
+
+
     #pass command: pass, initialzing the end of the round (very other player can make last move)
     if command == 'pass':
         data = json_request(server_url+f'/pass/{channel_name}/{sender_name}')
         if data: 
             await message.channel.send(str(data))
             return 
+
+#start bot           
 client.run(read_token())
 
